@@ -15,6 +15,8 @@
 #include <libmaple/scb.h>
 #include <libmaple/rcc.h>
 
+#include <time.h>
+
 #include "EC_OEM.h"
 
 
@@ -722,6 +724,9 @@ void setup(void)
   //setupEZOSerial();
   setupEZOI2C();
 
+  // Set up the Clock
+  Clock.setClockMode(false);
+
   /* We're ready to go! */
   writeDebugMessage(F("done with setup"));
 
@@ -736,8 +741,22 @@ void prepareForTriggeredMeasurement(){
 
 void measureSensorValues(){
 
+  byte year = Clock.getYear();
+  bool century;
+  byte month = Clock.getMonth(century); // ???  off by 1 b/c we are > 20000
+                                        //  I think we don't have to care about century
+  byte date = Clock.getDate();
+  bool h12;
+  bool PM_time;
+  byte hour = Clock.getHour(h12, PM_time); // set to 24 hour above
+  byte minute = Clock.getMinute();
+  byte second = Clock.getSecond();
+
+  //TODO: convert ymdhms to unix time
+
+
   // Fetch the time
-  unsigned long currentTime = RTC.now().unixtime();
+ // unsigned long currentTime = RTC.now().unixtime();
 
   // TODO: do we need to do this every time ??
   char uuidString[2 * UUID_LENGTH + 1];
