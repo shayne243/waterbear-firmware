@@ -9,6 +9,22 @@
 #include "system/watchdog.h"
 #include "sensors/atlas_rgb.h"
 
+#define CH4sens PC0 //CH4 sensor Vout
+#define CH4ref PC1 //CH4 sensor Vref
+#define Vb PB1 //Battery voltag
+
+int CH4s = 0;
+int CH4r = 0;
+int Vbat = 0;
+float CH4smV = 0;
+float CH4rmV = 0;
+float VbatmV = 0;
+float minS = 50000;
+float minR = 50000;
+float minV = 50000;
+float mV = 5000;
+float steps = 4096;
+// Steps = 2 ^ #ofADCpins
 // Setup and Loop
 
 void setup(void)
@@ -100,7 +116,38 @@ void intentionalMemoryLeak(){
 /* main run loop order of operation: */
 void loop(void)
 {
-
+  CH4s = analogRead(CH4sens); //read CH4 Vout
+  CH4smV = CH4s*(mV/steps); //convert pin reading to mV
+  if (CH4smV < minS) {
+    minS = CH4smV;
+  } 
+  delay(10); //delay between reading of different analogue pins adviced.
+  CH4r = analogRead(CH4ref); //read CH4 Vref
+  CH4rmV = CH4r*(mV/steps); //convert pin reading to mV
+  if (CH4rmV < minR) {
+    minR = CH4rmV;
+  } 
+  delay(10); //delay between reading of different analogue pins adviced.
+  Vbat = analogRead(Vb); //read CH4 Vref
+  VbatmV = Vbat *(mV/steps); //convert pin reading to mV, NOT YET correcting for the voltage divider.
+  if (VbatmV < minV && VbatmV != 0) {
+    minV = VbatmV;
+  } 
+  delay(10); //delay between reading of different analogue pins adviced.
+  Serial2.println("Next Set:");
+  Serial2.println(CH4s);
+  Serial2.println(CH4smV);
+  Serial2.println(minS);
+  Serial2.println();
+  Serial2.println(CH4r);
+  Serial2.println(CH4rmV);
+  Serial2.println(minR);
+  Serial2.println();
+  Serial2.println(Vbat);
+  Serial2.println(VbatmV);
+  Serial2.println(minV);
+  Serial2.println();
+  
   startCustomWatchDog();
   printWatchDogStatus();
 
