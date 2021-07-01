@@ -21,7 +21,7 @@ void setupSensors(){
 
   
   // Setup RGB Sensor
-  AtlasRGB::instance()->setup(&WireTwo);
+  //AtlasRGB::instance()->setup(&WireTwo);
 
 }
 
@@ -102,9 +102,9 @@ void loop(void)
   printWatchDogStatus();
 
   // Get reading from RGB Sensor
-  char * data = AtlasRGB::instance()->mallocDataMemory();
-  AtlasRGB::instance()->takeMeasurement(data);
-  free(data);
+  // char * data = AtlasRGB::instance()->mallocDataMemory();
+  // AtlasRGB::instance()->takeMeasurement(data);
+  // free(data);
  
 
   checkMemory();
