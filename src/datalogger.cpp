@@ -1,13 +1,18 @@
 #include "datalogger.h"
 #include "system/watchdog.h"
 
+// Methane Sensor Pins
+#define CH4sens PC0 //CH4 sensor Vout
+#define CH4ref PC1 //CH4 sensor Vref
+
 // Settings
+
 char version[5] = "v2.0";
 
 short interval = 1;     // minutes between loggings when not in short sleep
 short burstLength = 100; // how many readings in a burst
 
-short fieldCount = 22; // number of fields to be logged to SDcard file
+short fieldCount = 26; // number of fields to be logged to SDcard file
 
 // Pin Mappings for Nucleo Board
 // BLE USART
@@ -191,6 +196,17 @@ void allocateMeasurementValuesMemory()
   sprintf(values[20], "%10d", 0);
   values[21] = (char *)malloc(sizeof(char) * 31); // user serial notes input
   sprintf(values[21], "%30d", 0);
+  // Methane sensor fields - 4 readings in V and mV
+
+  values[22] = (char *)malloc(sizeof(int));
+  sprintf(values[22], "%d", 0);
+  values[23] = (char *)malloc(sizeof(float));
+  sprintf(values[23], "%f", 0);
+  values[24] = (char *)malloc(sizeof(int));
+  sprintf(values[24], "%d", 0);
+  values[25] = (char *)malloc(sizeof(float));
+  sprintf(values[25], "%f", 0);
+
 }
 
 void prepareForTriggeredMeasurement()
@@ -295,6 +311,21 @@ void measureSensorValues()
   readEEPROMBytes(TEMPERATURE_B_ADDRESS_START, (unsigned char *)&uiData, TEMPERATURE_B_ADDRESS_LENGTH);
   sprintf(values[17], "%i", uiData);
   sprintf(values[18], "%.2f", calculateTemperature());
+}
+
+int measureMethaneSensorValues() {
+  Serial2.println("METHANE");
+  int CH4s = analogRead(CH4sens);
+  int CH4r = analogRead(CH4ref);
+  float mV = 5000;
+  float steps = 4096;
+  float CH4smV = CH4s*(mV/steps);
+  float CH4rmV = CH4r*(mV/steps);
+
+  sprintf(values[22], "%d", CH4s);
+  sprintf(values[23], "%f", CH4smV);
+  sprintf(values[24], "%d", CH4r);
+  sprintf(values[25], "%f", CH4rmV);
 }
 
 bool checkBursting()
@@ -715,6 +746,7 @@ void takeNewMeasurement()
     Monitor::instance()->writeDebugMessage(F("Taking new measurement"));
   }
   measureSensorValues();
+  measureMethaneSensorValues();
 
   // OEM EC
   float ecValue = -1;

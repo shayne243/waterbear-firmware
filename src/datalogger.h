@@ -93,6 +93,8 @@ void monitorTemperature();
 
 bool checkThermistorCalibration();
 
+int measureMethaneSensorValues();
+
 void clearThermistorCalibration();
 
 float calculateTemperature();
