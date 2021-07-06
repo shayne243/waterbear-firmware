@@ -9,11 +9,12 @@
 
 char version[5] = "v2.0";
 
-short interval = 1;     // minutes between loggings when not in short sleep
-short burstLength = 100; // how many readings in a burst
+short interval = 15;     // minutes between loggings when not in short sleep
+short burstLength = 10; // how many readings in a burst
 
 short fieldCount = 26; // number of fields to be logged to SDcard file
-
+//char *nametest ="K217_Methane_Amazon_Test"; // >WT_DEPLOY:K217_Methane_Amazon_Test<
+//>WT_SET_RTC:1625247790<
 // Pin Mappings for Nucleo Board
 // BLE USART
 //#define D4 PB5

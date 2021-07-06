@@ -37,12 +37,12 @@ void setup(void)
 
   setupSwitchedPower();
 
-  Serial2.println("hello");
+  //Serial2.println("hello");
   enableSwitchedPower();
 
   setupHardwarePins();
-  Serial2.println("hello");
-  Serial2.flush();
+  //Serial2.println("hello");
+  //Serial2.flush();
 
   //Serial2.println(atlasRGBSensor.get_name());
   // digitalWrite(PA4, LOW); // turn on the battery measurement
