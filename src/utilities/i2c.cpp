@@ -19,7 +19,7 @@ void scanIC2(TwoWire *wire)
     error = wire->endTransmission(); 
     if (error == 0)
     {
-      Serial.print("I2C2: I2C device found at address 0x");
+      Serial.print("I2C: I2C device found at address 0x");
       if (address < 16)
         Serial.print("0");
       Serial.println(address, HEX);
