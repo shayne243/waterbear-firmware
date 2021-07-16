@@ -97,8 +97,8 @@ void loop(void)
   Serial2.println("**********************************");
 
   const char string[] = "In the rural town of Fly Creek, Georgia, a powerful storm blows down an overhead power line, leaving the area without electricity. The power line lands in wet mud and electrifies the worms underneath. The next morning, Geri Sanders borrows a truck from her neighbor, worm farmer Roger Grimes, to pick up her boyfriend Mick, who is arriving from New York City for a vacation. While Geri and Mick go to town, Roger's shipment of 100,000 bloodworms and sandworms escape from the back of the truck. Mick enters a diner, where a customer says over 300,000 volts are being released into the ground from severed power lines. He orders an egg cream and finds a worm in it, though the owner and Sheriff Jim Reston believe he placed it there himself as a prank.";
-
-  for(int i = 0; i <  129; ++i) {
+  const char string1[] = "GeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgiaGeorgia";
+  for(int i = 0; i <  128; ++i) {
     Wire.beginTransmission(0x50);
     Wire.write((uint8_t) i);
     Wire.write(string[i]);
@@ -106,23 +106,39 @@ void loop(void)
     delay(10);
   }
 
- for(int i = 0; i <  129; ++i) {
-    Wire.beginTransmission(0x53);
+  for(int i = 0; i <  128; ++i) {
+    Wire.beginTransmission(0x51);
+    Wire.write((uint8_t) i);
+    Wire.write(string1[i]);
+    Wire.endTransmission();
+    delay(10);
+  }
+
+ for(int i = 0; i <  128; ++i) {
+    Wire.beginTransmission(0x50);
     Wire.write((uint8_t) i);
     Wire.endTransmission();
 
-    Wire.requestFrom(0x53,1);
+    Wire.requestFrom(0x50,1);
 
     if(Wire.available()) {
-      Serial.print(i);
-      if (((char) Wire.read()) == string[i]) {
-        Serial2.println(" true");  
-      }
-      else {
-        Serial2.println(" false");
-      }
+      Serial2.print(i);
+      Serial2.println((char)Wire.read());
     }
   }
+  // Serial2.println("**********************************************");
+  // for(int i = 0; i <  128; ++i) {
+  //   Wire.beginTransmission(0x51);
+  //   Wire.write((uint8_t) i);
+  //   Wire.endTransmission();
+
+  //   Wire.requestFrom(0x51,1);
+
+  //   if(Wire.available()) {
+  //     Serial2.print(i);
+  //     Serial2.println((char)Wire.read());
+  //   }
+  // }
   Serial2.println("**********************************");
 
 /*
